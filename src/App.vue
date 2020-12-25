@@ -1,28 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view/>
   </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  created() {
+    //获取排名分类
+    this.axios({
+      method: 'get',
+      url: '/rank-category',
+    }).then((res) => {
+      this.$store.commit('updateRankCategory', res.data)
+    })
+  },
 }
 </script>
-
 <style>
-#app {
+#app{
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  color: #2c3e50;
+  background-color: #f4f4f4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  }
 </style>
