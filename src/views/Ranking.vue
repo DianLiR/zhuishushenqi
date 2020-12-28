@@ -16,6 +16,7 @@
         </van-sidebar>
 
         <van-list
+          v-if="ranking != null"
           v-model="loading"
           :finished="finished"
           class="right_list"
@@ -33,80 +34,80 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import BookCard from "../components/BookCard";
+import {mapState} from 'vuex'
+import BookCard from '../components/BookCard'
 
 export default {
-  name: "Ranking",
+  name: 'Ranking',
   components: { BookCard },
   data() {
     return {
-      type: "epub",
+      type: 'epub',
       ranking: null,
       activeKey: 0,
       loading: true,
       finished: true,
       tabListDate: [
         {
-          title: "出版",
-          name: "epub",
+          title: '出版',
+          name: 'epub',
         },
         {
-          title: "男生",
-          name: "male",
+          title: '男生',
+          name: 'male',
         },
         {
-          title: "女生",
-          name: "female",
+          title: '女生',
+          name: 'female',
         },
       ],
-    };
+    }
   },
   computed: {
-    ...mapState(["rankCategory"]),
+    ...mapState(['rankCategory']),
   },
   created() {
-    this.getList();
+    this.getList()
   },
   watch: {
     type() {
-      this.activeKey = 0;
-      this.getList();
+      this.activeKey = 0
+      this.getList()
     },
     activeKey() {
-      this.getList();
+      this.getList()
     },
   },
   methods: {
     onClickVanTab(name) {
-      this.$router.push("/ranking?type=" + name);
+      this.$router.push('/ranking?type=' + name)
     },
 
     getList() {
-      let id = this.rankCategory[this.type][this.activeKey]._id;
+      let id = this.rankCategory[this.type][this.activeKey]._id
       this.$toast.loading({
-        message: "加载中...",
+        message: '加载中...',
         forbidClick: true,
         // overlay: true,
-      });
+      })
       this.axios({
-        url: "/rank/" + id,
+        url: '/rank/' + id,
       }).then((res) => {
-        this.$toast.clear();
-        this.ranking = res.data.ranking;
-      });
+        this.ranking = res.data.ranking
+        this.$toast.clear()
+      })
     },
   },
   beforeRouteEnter(t, f, n) {
     n((vm) => {
-      vm.type = t.query.type || "epub";
-    });
+      vm.type = t.query.type || 'epub'
+    })
   },
   beforeRouteUpdate(t, f, n) {
-    this.type = t.query.type || "epub";
-    n();
+    this.type = t.query.type || 'epub'
+    n()
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
